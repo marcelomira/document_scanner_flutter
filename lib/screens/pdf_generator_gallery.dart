@@ -4,6 +4,7 @@ import 'package:document_scanner_flutter/screens/photo_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf_compressor/pdf_compressor.dart';
 
 /// @nodoc
 typedef Future<File?>? ScannerFilePicker();
@@ -72,6 +73,15 @@ class _PdfGeneratotGalleryState extends State<PdfGeneratotGallery> {
       final file =
           File("${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
       await file.writeAsBytes(await pdf.save());
+
+      try {
+        await PdfCompressor.compressPdfFile(
+            file.path, file.path, CompressQuality.MEDIUM);
+      } catch (e) {
+        print(e);
+        return 'Error';
+      }
+
       Navigator.of(context).pop(file);
     } catch (e) {
       String message = "Unkown Error";
