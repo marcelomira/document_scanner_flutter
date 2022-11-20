@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:document_scanner_flutter/configs/configs.dart';
 import 'package:document_scanner_flutter/screens/photo_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf_compressor/pdf_compressor.dart';
 
 /// @nodoc
 typedef Future<File?>? ScannerFilePicker();
@@ -55,6 +55,15 @@ class _PdfGeneratotGalleryState extends State<PdfGeneratotGallery> {
   }
 
   onDone() async {
+    // Compress
+    for (var file in files) {
+      print(file.lengthSync());
+      var result = await FlutterImageCompress.compressWithFile(
+          file.absolute.path,
+          quality: 80);
+      print(result!.length);
+    }
+
     final pdf = pw.Document();
     for (var file in files) {
       pdf.addPage(pw.Page(build: (pw.Context context) {
@@ -73,14 +82,6 @@ class _PdfGeneratotGalleryState extends State<PdfGeneratotGallery> {
       final file =
           File("${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
       await file.writeAsBytes(await pdf.save());
-
-      try {
-        await PdfCompressor.compressPdfFile(
-            file.path, file.path, CompressQuality.MEDIUM);
-      } catch (e) {
-        print(e);
-        return 'Error';
-      }
 
       Navigator.of(context).pop(file);
     } catch (e) {
