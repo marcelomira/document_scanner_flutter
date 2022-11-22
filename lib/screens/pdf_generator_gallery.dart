@@ -63,7 +63,7 @@ class _PdfGeneratotGalleryState extends State<PdfGeneratotGallery> {
       dest = dest.replaceAll(".jpg", "_compressed.jpg");
       var result = await FlutterImageCompress.compressAndGetFile(
           file.absolute.path, dest,
-          quality: 50);
+          quality: 30);
       print(result!.lengthSync());
       files[i] = result;
       i += 1;
