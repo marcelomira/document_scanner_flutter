@@ -25,14 +25,14 @@ class _PdfGeneratotGalleryState extends State<PdfGeneratotGallery> {
 
   addImage() async {
     var file = await widget.filePicker();
-    if (files.length > 2) {
+    if (files.length > 25) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           // retorna um objeto do tipo Dialog
           return AlertDialog(
             title: new Text("Atenção"),
-            content: new Text("No máximo são permitidos 3 imagens por ato"),
+            content: new Text("No máximo são permitidos 25 imagens por ato"),
             actions: <Widget>[
               // define os botões na base do dialogo
               new ElevatedButton(
