@@ -81,11 +81,18 @@ class _PdfGeneratotGalleryState extends State<PdfGeneratotGallery> {
         ); // Center
       }));
     }
-    Directory tempDir = await getTemporaryDirectory();
+
+    Directory tempDir = await getApplicationDocumentsDirectory();
+    List<Directory>? extDir =
+        await getExternalStorageDirectories(type: StorageDirectory.documents);
+
+    if (extDir != null && extDir.length > 0) tempDir = extDir[0];
+
     try {
       tempDir.createSync();
       final file =
           File("${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
+      print("${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
       await file.writeAsBytes(await pdf.save());
 
       Navigator.of(context).pop(file);
