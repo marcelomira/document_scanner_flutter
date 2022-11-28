@@ -82,9 +82,14 @@ class _PdfGeneratotGalleryState extends State<PdfGeneratotGallery> {
       }));
     }
 
+    List<Directory>? extDir;
     Directory tempDir = await getApplicationDocumentsDirectory();
-    List<Directory>? extDir =
-        await getExternalStorageDirectories(type: StorageDirectory.documents);
+    try {
+      extDir =
+          await getExternalStorageDirectories(type: StorageDirectory.documents);
+    } catch (ex) {
+      print("Não é Android");
+    }
 
     if (extDir != null && extDir.length > 0) tempDir = extDir[0];
 
