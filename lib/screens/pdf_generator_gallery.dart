@@ -13,8 +13,9 @@ typedef Future<File?>? ScannerFilePicker();
 class PdfGeneratotGallery extends StatefulWidget {
   final ScannerFilePicker filePicker;
   final Map<dynamic, String> labelsConfig;
+  final int? atoId;
 
-  const PdfGeneratotGallery(this.filePicker, this.labelsConfig);
+  const PdfGeneratotGallery(this.filePicker, this.labelsConfig, this.atoId);
 
   @override
   _PdfGeneratotGalleryState createState() => _PdfGeneratotGalleryState();
@@ -95,9 +96,14 @@ class _PdfGeneratotGalleryState extends State<PdfGeneratotGallery> {
 
     try {
       tempDir.createSync();
-      final file =
-          File("${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
-      print("${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
+      var strFile = "${tempDir.path}/";
+
+      // Se houver atoId, colocar no inicio do nome arquivo pdf
+      if (widget.atoId != null) strFile += widget.atoId.toString() + "_";
+      strFile += "${DateTime.now().millisecondsSinceEpoch}.pdf";
+
+      final file = File(strFile);
+      print(strFile);
       await file.writeAsBytes(await pdf.save());
 
       Navigator.of(context).pop(file);
